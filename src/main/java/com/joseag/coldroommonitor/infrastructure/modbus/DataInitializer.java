@@ -37,6 +37,19 @@ public class DataInitializer implements CommandLineRunner {
             s2.setColdRoom(room1);
             s2.setEnabled(true);
             sensorRepo.save(s2);
+
+
+            ColdRoom room2 = new ColdRoom();
+            room2.setName("Camara Congelacion #2");
+            room2.setLocation("Planta A");
+            coldRoomRepo.save(room2);
+
+            SensorDevice s3 = new SensorDevice();
+            s3.setName("EKC-3");
+            s3.setColdRoom(room2);
+            s3.setEnabled(true);
+            sensorRepo.save(s3);
+
         }
     }
 }

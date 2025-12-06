@@ -11,6 +11,8 @@ public class FakeModbusClient {
     private final Random random = new Random();
 
     public Double readTemperature(SensorDevice sensor){
-        return -25 + (10*random.nextDouble());
+        double result = -25 + (10*random.nextDouble());
+        int rounded = (int) (result*10);
+        return rounded/10.0;
     }
 }

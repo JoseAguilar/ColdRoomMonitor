@@ -1,5 +1,7 @@
 package com.joseag.coldroommonitor.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,12 +13,20 @@ public class Measurement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sensor_id", nullable = false)
+    @JsonIgnore
     private SensorDevice sensor;
 
     private LocalDateTime timestamp;
 
     private double value;
+
+
+    @JsonProperty("sensorId")
+    public Long getIdOfSensor(){
+        return sensor != null ? sensor.getId() : null;
+    }
 
 
     public Long getId() {

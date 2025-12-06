@@ -1,27 +1,40 @@
 package com.joseag.coldroommonitor.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ColdRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long coldrooom_id;
 
     private String name;
     private String location;
     private boolean enabled = true;
 
+    @OneToMany(mappedBy = "coldRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<SensorDevice> sensorDeviceList = new ArrayList<>();
+
+    public List<SensorDevice> getSensorDeviceList() {
+        return sensorDeviceList;
+    }
+
+    public void setSensorDeviceList(List<SensorDevice> sensorDeviceList) {
+        this.sensorDeviceList = sensorDeviceList;
+    }
+
     public Long getId() {
-        return id;
+        return coldrooom_id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.coldrooom_id = id;
     }
 
     public String getName() {

@@ -1,51 +1,53 @@
 package com.joseag.coldroommonitor.api.controller;
 
-import com.joseag.coldroommonitor.application.dto.ColdRoomUpdateRequest;
-import com.joseag.coldroommonitor.application.service.ColdRoomService;
-import com.joseag.coldroommonitor.domain.model.ColdRoom;
+import com.joseag.coldroommonitor.api.dto.request.ColdRoomCreateRequest;
+import com.joseag.coldroommonitor.api.dto.request.ColdRoomUpdateRequest;
+import com.joseag.coldroommonitor.api.dto.response.ColdRoomResponse;
+import com.joseag.coldroommonitor.application.service.ColdRoomApplicationService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/cold-rooms")
 public class ColdRoomController {
 
-    private final ColdRoomService service;
+    private final ColdRoomApplicationService service;
 
-    public ColdRoomController(ColdRoomService service){
+    public ColdRoomController(ColdRoomApplicationService service){
         this.service = service;
     }
 
     @GetMapping
-    public List<ColdRoom> getAll(){
+    public List<ColdRoomResponse> getAll(){
         return service.findAll();
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<ColdRoom> getFromId(@PathVariable Long id){
-        Optional<ColdRoom> optionalColdRoom = service.findById(id);
-        return optionalColdRoom.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/{id}")
+    public ColdRoomResponse getById(@PathVariable @Min(1) Long id){
+        return service.getById(id);
     }
 
     @PostMapping
-    public ColdRoom create(@RequestBody ColdRoom room){
-        return service.create(room);
+    public ResponseEntity<ColdRoomResponse> create(@RequestBody @Valid ColdRoomCreateRequest request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-
-        boolean deleted = service.deleteById(id);
-        return deleted?ResponseEntity.noContent().build():ResponseEntity.notFound().build();
-
+    @PatchMapping("/{id}")
+    public ColdRoomResponse partialUpdate(@PathVariable @Min(1) Long id, @Valid @RequestBody ColdRoomUpdateRequest request){
+        return service.updateColdRoom(id, request);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<ColdRoom> put(@PathVariable Long id, @RequestBody ColdRoomUpdateRequest room){
-        Optional<ColdRoom> updated = service.updateColdRoom(id, room);
-        return updated.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @Min(1) Long id){
+        service.deleteById(id);
     }
+
 }

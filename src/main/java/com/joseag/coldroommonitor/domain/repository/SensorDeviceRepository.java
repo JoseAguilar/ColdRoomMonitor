@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SensorDeviceRepository extends JpaRepository<SensorDevice, Long> {
     List<SensorDevice> findByEnabledTrue();
+    List<SensorDevice> findByColdRoomId(Long coldRoomId);
 }

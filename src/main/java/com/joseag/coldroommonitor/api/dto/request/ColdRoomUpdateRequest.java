@@ -1,4 +1,4 @@
-package com.joseag.coldroommonitor.application.dto;
+package com.joseag.coldroommonitor.api.dto.request;
 
 public class ColdRoomUpdateRequest {
 

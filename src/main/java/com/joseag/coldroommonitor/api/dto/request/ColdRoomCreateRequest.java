@@ -2,6 +2,7 @@ package com.joseag.coldroommonitor.api.dto.request;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ColdRoomCreateRequest {
 
@@ -10,7 +11,7 @@ public class ColdRoomCreateRequest {
     @NotBlank
     private String location;
 
-    @NotBlank
+    @NotNull
     private Boolean enabled;
 
     public String getName() {

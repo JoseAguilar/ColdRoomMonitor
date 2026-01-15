@@ -21,9 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (coldRoomRepo.count() == 0) {
-            ColdRoom room1 = new ColdRoom();
-            room1.setName("Camara Congelación #1");
-            room1.setLocation("Planta A");
+            ColdRoom room1 = new ColdRoom("Camara Congelación #1","Planta A" );
             coldRoomRepo.save(room1);
 
             SensorDevice s1 = new SensorDevice();
@@ -39,9 +37,7 @@ public class DataInitializer implements CommandLineRunner {
             sensorRepo.save(s2);
 
 
-            ColdRoom room2 = new ColdRoom();
-            room2.setName("Camara Congelacion #2");
-            room2.setLocation("Planta A");
+            ColdRoom room2 = new ColdRoom("Camara Congelacion #2", "Planta A");
             coldRoomRepo.save(room2);
 
             SensorDevice s3 = new SensorDevice();

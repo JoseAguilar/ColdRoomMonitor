@@ -3,15 +3,17 @@ package com.joseag.coldroommonitor.api.controller;
 import com.joseag.coldroommonitor.api.dto.request.ColdRoomCreateRequest;
 import com.joseag.coldroommonitor.api.dto.request.ColdRoomUpdateRequest;
 import com.joseag.coldroommonitor.api.dto.response.ColdRoomResponse;
+import com.joseag.coldroommonitor.application.command.CreateColdRoomCommand;
+import com.joseag.coldroommonitor.application.command.UpdateColdRoomCommand;
 import com.joseag.coldroommonitor.application.service.ColdRoomApplicationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Validated
 @RestController
@@ -25,8 +27,8 @@ public class ColdRoomController {
     }
 
     @GetMapping
-    public List<ColdRoomResponse> getAll(){
-        return service.findAll();
+    public Page<ColdRoomResponse> getAll(Pageable pageable){
+        return service.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -36,12 +38,27 @@ public class ColdRoomController {
 
     @PostMapping
     public ResponseEntity<ColdRoomResponse> create(@RequestBody @Valid ColdRoomCreateRequest request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+
+        var command = new CreateColdRoomCommand(
+          request.getName(),
+          request.getLocation(),
+          request.getEnabled()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(command));
     }
 
     @PatchMapping("/{id}")
     public ColdRoomResponse partialUpdate(@PathVariable @Min(1) Long id, @Valid @RequestBody ColdRoomUpdateRequest request){
-        return service.updateColdRoom(id, request);
+
+        var command = new UpdateColdRoomCommand(
+          id,
+          request.getName(),
+          request.getLocation(),
+          request.getEnabled()
+        );
+
+        return service.partialUpdate(command);
     }
 
     @DeleteMapping("/{id}")

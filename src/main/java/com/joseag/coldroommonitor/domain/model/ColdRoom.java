@@ -2,6 +2,7 @@ package com.joseag.coldroommonitor.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joseag.coldroommonitor.api.dto.request.ColdRoomUpdateRequest;
+import com.joseag.coldroommonitor.application.command.UpdateColdRoomCommand;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,6 +18,13 @@ public class ColdRoom {
     private String name;
     private String location;
     private boolean enabled = true;
+
+    protected ColdRoom(){}
+
+    public ColdRoom(String name, String location) {
+        this.name = name;
+        this.location = location;
+    }
 
     @OneToMany(mappedBy = "coldRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SensorDevice> sensorDeviceList = new ArrayList<>();
@@ -61,17 +69,17 @@ public class ColdRoom {
         this.enabled = enabled;
     }
 
-    public void update(ColdRoomUpdateRequest request){
-        if (request.getName() != null){
-            this.name = request.getName();
+    public void update(UpdateColdRoomCommand command){
+        if (command.name() != null){
+            this.name = command.name();
         }
 
-        if (request.getLocation() != null){
-            this.location = request.getLocation();
+        if (command.location() != null){
+            this.location = command.location();
         }
 
-        if (request.getEnabled() != null){
-            this.enabled = request.getEnabled();
+        if (command.enabled() != null){
+            this.enabled = command.enabled();
         }
     }
 }

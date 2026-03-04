@@ -1,6 +1,7 @@
 package com.joseag.coldroommonitor.infrastructure.exception;
 
 import com.joseag.coldroommonitor.domain.exceptions.ColdRoomNotFoundException;
+import com.joseag.coldroommonitor.domain.exceptions.SensorDeviceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     private static final String COLD_ROOM_NOT_FOUND = "COLD_ROOM_NOT_FOUND";
+    private static final String SENSOR_DEVICE_NOT_FOUND = "SENSOR_DEVICE_NOT_FOUND";
     private static final String VALIDATION_ERROR = "VALIDATION_ERROR";
 
     @ExceptionHandler(ColdRoomNotFoundException.class)
     public ResponseEntity<ApiError> handleColdRoomNotFound(ColdRoomNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(COLD_ROOM_NOT_FOUND, ex.getMessage()));
+    }
+
+    @ExceptionHandler(SensorDeviceNotFoundException.class)
+    public ResponseEntity<ApiError> handleSensorDeviceNotFound(SensorDeviceNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(SENSOR_DEVICE_NOT_FOUND, ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

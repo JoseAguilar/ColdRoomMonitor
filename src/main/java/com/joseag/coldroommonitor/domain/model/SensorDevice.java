@@ -27,6 +27,12 @@ public class SensorDevice {
     @JsonIgnore
     private List<Measurement> measurements = new ArrayList<>();
 
+    public SensorDevice(String name, ColdRoom coldRoom, boolean enabled){
+        this.name = name;
+        this.coldRoom = coldRoom;
+        this.enabled = enabled;
+    }
+
 
     @JsonProperty("coldRoomId")
     public Long getIdOfColdRoom(){

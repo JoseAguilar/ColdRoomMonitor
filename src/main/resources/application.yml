@@ -5,6 +5,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/coldroomdb
     username: coldroommonitor
     password: 9kd#absk@34S
+  data:
+    web:
+      pageable:
+        default-page-size: 50
+        max-page-size: 100
   jpa:
     hibernate:
       ddl-auto: update # en dev; luego cambiar a validate

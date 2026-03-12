@@ -1,7 +1,8 @@
 package com.joseag.coldroommonitor.api.dto.request;
 
-public record ColdRoomUpdateRequest(
+
+public record SensorDeviceUpdateRequest(
         String name,
-        String location,
+        Long coldRoomId,
         Boolean enabled
 ) { }

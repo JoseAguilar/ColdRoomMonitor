@@ -12,14 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
-public class ColdRoomApplicationService {
+public class ColdRoomService {
     private final ColdRoomRepository repo;
     private final ColdRoomMapper mapper;
 
-    public ColdRoomApplicationService(ColdRoomRepository repo, ColdRoomMapper mapper){
+    public ColdRoomService(ColdRoomRepository repo, ColdRoomMapper mapper){
         this.repo = repo;
         this.mapper = mapper;
     }
@@ -72,7 +70,7 @@ public class ColdRoomApplicationService {
      *
      * @param command datos para actualizar el cuarto frio
      * @return respuesta del cuarto frio
-     * Applies a partial update: only non-null fields from the command are applied.
+     * Aplica una actualizacion parcial: solamente los campos que no sean nulos seran aplicados.
      * @throws ColdRoomNotFoundException si no existe un cuarto frio por ese id
      */
     @Transactional

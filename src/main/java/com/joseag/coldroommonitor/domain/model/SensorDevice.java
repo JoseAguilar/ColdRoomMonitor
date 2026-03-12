@@ -2,6 +2,7 @@ package com.joseag.coldroommonitor.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.joseag.coldroommonitor.application.command.UpdateSensorDeviceCommand;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class SensorDevice {
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Measurement> measurements = new ArrayList<>();
+
+    protected SensorDevice(){}
 
     public SensorDevice(String name, ColdRoom coldRoom, boolean enabled){
         this.name = name;
@@ -77,5 +80,14 @@ public class SensorDevice {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void update(UpdateSensorDeviceCommand command){
+        if (command.name() != null){
+            this.name = command.name();
+        }
+        if (command.enabled() != null){
+            this.enabled = command.enabled();
+        }
     }
 }

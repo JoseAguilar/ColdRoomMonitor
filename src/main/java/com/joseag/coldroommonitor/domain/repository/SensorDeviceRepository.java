@@ -5,9 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 
 public interface SensorDeviceRepository extends JpaRepository<SensorDevice, Long> {
     Page<SensorDevice> findByEnabledTrue(Pageable pageable);
-    List<SensorDevice> findByColdRoomId(Long coldRoomId);
+    Page<SensorDevice> findByColdRoomId(Long coldRoomId, Pageable pageable);
 }

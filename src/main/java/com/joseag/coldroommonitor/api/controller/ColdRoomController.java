@@ -5,9 +5,10 @@ import com.joseag.coldroommonitor.api.dto.request.ColdRoomUpdateRequest;
 import com.joseag.coldroommonitor.api.dto.response.ColdRoomResponse;
 import com.joseag.coldroommonitor.application.command.CreateColdRoomCommand;
 import com.joseag.coldroommonitor.application.command.UpdateColdRoomCommand;
-import com.joseag.coldroommonitor.application.service.ColdRoomApplicationService;
+import com.joseag.coldroommonitor.application.service.ColdRoomService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/cold-rooms")
 public class ColdRoomController {
 
-    private final ColdRoomApplicationService service;
+    private final ColdRoomService service;
 
-    public ColdRoomController(ColdRoomApplicationService service){
+    public ColdRoomController(ColdRoomService service){
         this.service = service;
     }
 
@@ -32,7 +33,7 @@ public class ColdRoomController {
     }
 
     @GetMapping("/{id}")
-    public ColdRoomResponse getById(@PathVariable @Min(1) Long id){
+    public ColdRoomResponse getById(@PathVariable @Positive Long id){
         return service.getById(id);
     }
 
@@ -40,9 +41,9 @@ public class ColdRoomController {
     public ResponseEntity<ColdRoomResponse> create(@RequestBody @Valid ColdRoomCreateRequest request){
 
         var command = new CreateColdRoomCommand(
-          request.getName(),
-          request.getLocation(),
-          request.getEnabled()
+          request.name(),
+          request.location(),
+          request.enabled()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(command));
@@ -53,9 +54,9 @@ public class ColdRoomController {
 
         var command = new UpdateColdRoomCommand(
           id,
-          request.getName(),
-          request.getLocation(),
-          request.getEnabled()
+          request.name(),
+          request.location(),
+          request.enabled()
         );
 
         return service.partialUpdate(command);

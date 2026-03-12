@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,9 +19,9 @@ public class Measurement {
     @JsonIgnore
     private SensorDevice sensor;
 
-    private LocalDateTime timestamp;
+    private LocalDateTime measuredAt;
 
-    private double value;
+    private BigDecimal value;
 
 
     @JsonProperty("sensorId")
@@ -45,19 +46,19 @@ public class Measurement {
         this.sensor = sensor;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDateTime getMeasuredAt() {
+        return measuredAt;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setMeasuredAt(LocalDateTime timestamp) {
+        this.measuredAt = timestamp;
     }
 
-    public double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

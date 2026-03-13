@@ -26,7 +26,7 @@ public class ColdRoom {
         this.location = location;
     }
 
-    @OneToMany(mappedBy = "coldRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "coldRoom")
     private List<SensorDevice> sensorDeviceList = new ArrayList<>();
 
     public List<SensorDevice> getSensorDeviceList() {

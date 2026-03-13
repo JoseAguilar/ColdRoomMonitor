@@ -1,7 +1,12 @@
 package com.joseag.coldroommonitor.infrastructure.exception;
 
+import java.time.LocalDateTime;
+
 public record ApiError(
-        String code,
-        String message
+        int status,
+        String error,
+        String message,
+        String path,
+        LocalDateTime timestamp
 ) {
 }

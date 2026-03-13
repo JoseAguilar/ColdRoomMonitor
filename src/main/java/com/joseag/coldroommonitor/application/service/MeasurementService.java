@@ -59,6 +59,9 @@ public class MeasurementService {
 
     private Page<MeasurementItemResponse> getMeasurementsBySensor(SearchMeasurementCommand command, Long sensorId, Pageable pageable){
         if (command.from() != null && command.to() != null){
+            if (command.from().isAfter(command.to())){
+                throw new IllegalArgumentException("'from' must be before or equal 'to'");
+            }
             Page<Measurement> measurementList = measurementRepo.findBySensorIdAndMeasuredAtBetween(sensorId, command.from(), command.to(), pageable);
             return mapper.toSensorResponse(measurementList);
         } else if (command.to() != null){

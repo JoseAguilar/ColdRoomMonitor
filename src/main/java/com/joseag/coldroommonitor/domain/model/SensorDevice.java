@@ -24,7 +24,7 @@ public class SensorDevice {
 
     private boolean enabled = true;
 
-    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sensor")
     @JsonIgnore
     private List<Measurement> measurements = new ArrayList<>();
 

@@ -42,7 +42,7 @@ public class MeasurementService {
     }
 
     private SensorDevice getSensorByIdOrThrow(Long id){
-        return this.sensorRepo.findById(id).orElseThrow(()-> new SensorDeviceNotFoundException(id));
+        return this.sensorRepo.findByIdAndEnabledTrue(id).orElseThrow(()-> new SensorDeviceNotFoundException(id));
     }
 
     private Measurement saveMeasurement(SensorDevice sensor, BigDecimal value, LocalDateTime measuredAt){
@@ -54,6 +54,7 @@ public class MeasurementService {
     }
 
     public Page<MeasurementItemResponse> getSensorMeasurements(SearchMeasurementCommand command, Long sensorId, Pageable pageable){
+        this.getSensorByIdOrThrow(sensorId);
         return getMeasurementsBySensor(command, sensorId, pageable);
     }
 

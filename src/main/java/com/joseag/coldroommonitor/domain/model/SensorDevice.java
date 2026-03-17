@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.joseag.coldroommonitor.application.command.UpdateSensorDeviceCommand;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class SensorDevice {
+public class SensorDevice extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,8 @@ public class SensorDevice {
     private ColdRoom coldRoom;
 
     private boolean enabled = true;
+
+    private LocalDateTime disabledAt;
 
     @OneToMany(mappedBy = "sensor")
     @JsonIgnore
@@ -82,6 +85,10 @@ public class SensorDevice {
         this.enabled = enabled;
     }
 
+    public LocalDateTime getDisabledAt() {
+        return disabledAt;
+    }
+
     public void update(UpdateSensorDeviceCommand command){
         if (command.name() != null){
             this.name = command.name();
@@ -89,5 +96,10 @@ public class SensorDevice {
         if (command.enabled() != null){
             this.enabled = command.enabled();
         }
+    }
+
+    public void disable(){
+        this.enabled = false;
+        this.disabledAt = LocalDateTime.now();
     }
 }

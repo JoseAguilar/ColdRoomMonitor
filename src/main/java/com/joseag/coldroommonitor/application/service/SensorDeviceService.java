@@ -31,12 +31,12 @@ public class SensorDeviceService {
     }
 
     private SensorDevice getByIdOrThrow(Long id){
-        return sensorRepo.findById(id)
+        return sensorRepo.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new SensorDeviceNotFoundException(id));
     }
 
     private ColdRoom getColdRoomByIdOrThrow(Long id){
-        return coldRoomRepo.findById(id)
+        return coldRoomRepo.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new ColdRoomNotFoundException(id));
     }
 
@@ -46,7 +46,7 @@ public class SensorDeviceService {
      */
     @Transactional(readOnly = true)
     public Page<SensorDeviceResponse> getAllSensors(Pageable pageable){
-        return sensorMapper.toResponsePage(sensorRepo.findAll(pageable));
+        return sensorMapper.toResponsePage(sensorRepo.findAllByEnabledTrue(pageable));
     }
 
     /**
@@ -65,7 +65,7 @@ public class SensorDeviceService {
      *
      * @throws ColdRoomNotFoundException si el cuarto frio no existe.
      * */
-    @Transactional(readOnly = true)
+    @Transactional
     public SensorDeviceResponse create(CreateSensorDeviceCommand command){
 
         ColdRoom coldRoom = getColdRoomByIdOrThrow(command.coldRoomId());
@@ -103,5 +103,17 @@ public class SensorDeviceService {
         }
 
         return sensorMapper.toResponse(sensorDevice);
+    }
+
+    /**
+    * Elimina un cuarto frio por su id (soft-delete)
+    *
+    * @param id identificador del cuarto frio
+    * @throws ColdRoomNotFoundException si no existe un cuarto frio por ese id.
+    */
+    @Transactional
+    public void deleteById(Long id){
+        SensorDevice sensorDevice = this.getByIdOrThrow(id);
+        sensorDevice.disable();
     }
 }

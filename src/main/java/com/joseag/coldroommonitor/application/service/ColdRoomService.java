@@ -23,12 +23,12 @@ public class ColdRoomService {
     }
 
     private ColdRoom getByIdOrThrow(Long id){
-        return repo.findById(id)
+        return repo.findByIdAndEnabledTrue(id)
                 .orElseThrow(() -> new ColdRoomNotFoundException(id));
     }
 
     public Page<ColdRoomResponse> findAll(Pageable pageable){
-        return mapper.toResponsePage(repo.findAll(pageable));
+        return mapper.toResponsePage(repo.findAllByEnabledTrue(pageable));
     }
 
 
@@ -44,14 +44,15 @@ public class ColdRoomService {
     }
 
     /**
-     * Elimina un cuarto frio por su id
+     * Elimina un cuarto frio por su id (soft-delete)
      *
      * @param id identificador del cuarto frio
      * @throws ColdRoomNotFoundException si no existe un cuarto frio por ese id.
      */
+    @Transactional
     public void deleteById(Long id){
         ColdRoom coldRoom = getByIdOrThrow(id);
-        repo.delete(coldRoom);
+        coldRoom.disable();
     }
 
     /**

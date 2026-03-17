@@ -7,6 +7,7 @@ import com.joseag.coldroommonitor.application.command.CreateSensorDeviceCommand;
 import com.joseag.coldroommonitor.application.command.UpdateSensorDeviceCommand;
 import com.joseag.coldroommonitor.application.service.SensorDeviceService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,5 +67,11 @@ public class SensorDeviceController {
     @GetMapping("/cold-rooms/{coldRoomId}/sensors")
     public Page<SensorDeviceResponse> getAllSensors(@PathVariable @Positive Long coldRoomId, Pageable pageable){
         return service.findByColdRoom(coldRoomId, pageable);
+    }
+
+    @DeleteMapping("/sensors/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @Min(1) Long id){
+        service.deleteById(id);
     }
 }

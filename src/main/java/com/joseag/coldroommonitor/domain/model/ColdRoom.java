@@ -1,15 +1,14 @@
 package com.joseag.coldroommonitor.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.joseag.coldroommonitor.api.dto.request.ColdRoomUpdateRequest;
 import com.joseag.coldroommonitor.application.command.UpdateColdRoomCommand;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class ColdRoom {
+public class ColdRoom extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +17,8 @@ public class ColdRoom {
     private String name;
     private String location;
     private boolean enabled = true;
+
+    private LocalDateTime disabledAt;
 
     protected ColdRoom(){}
 
@@ -69,6 +70,10 @@ public class ColdRoom {
         this.enabled = enabled;
     }
 
+    public LocalDateTime getDisabledAt(){
+        return this.disabledAt;
+    }
+
     public void update(UpdateColdRoomCommand command){
         if (command.name() != null){
             this.name = command.name();
@@ -81,5 +86,11 @@ public class ColdRoom {
         if (command.enabled() != null){
             this.enabled = command.enabled();
         }
+    }
+
+    public void disable(){
+        this.setEnabled(false);
+        this.disabledAt = LocalDateTime.now();
+        this.getSensorDeviceList().forEach(SensorDevice::disable);
     }
 }
